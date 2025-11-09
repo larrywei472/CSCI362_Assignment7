@@ -12,9 +12,9 @@ constexpr const size_t RANDOM_GENERATED_NUMBER_AMOUNT = 1000;
 class Hashmap{
 
     private:
-
         const int _table_size;      // In this assignment, it will always be 10
         std::vector<std::list<int>> _data_table;
+
 
     public:
 
@@ -24,6 +24,7 @@ class Hashmap{
             }
         }
 
+        // Auto initialize table size to be 9, default for [10,99] specification
         Hashmap() : _table_size(9), _data_table(_table_size){
             for(int x = 0 ; x < 9 ; x++){
                 _data_table.at(x) = std::list<int>();
@@ -50,9 +51,12 @@ class Hashmap{
         
         // Add to linked list if linked list does not already have value
         void add(const int value){
+
+            // Get index for value
             size_t insert_index = hash_function(value);
             auto& i_list = _data_table.at(insert_index);
 
+            // Search through list at the index, and add only if the value doesn't already exist
             bool add_value = true;
             for(std::list<int>::iterator it = i_list.begin() ; it != i_list.end() ; it++){
                 if(*it == value){
@@ -65,11 +69,14 @@ class Hashmap{
         }
 
 
+        // Returns the list at a certain table index
         // return it as a const so you cannot directly edit 
         const std::list<int>& table_list_at(const int table_index){
             return const_cast<const std::list<int>&>(_data_table.at(table_index));
         }
 
+
+        // Print the total hashmap
         void print_hashmap(){
 
             int cnt = 1;
@@ -84,6 +91,8 @@ class Hashmap{
             }
         }
 
+
+        // Print a row 
         void print_table(int row){
             row--;
 
@@ -107,20 +116,31 @@ class Hashmap{
 
 int main(){
 
+
+    // variables for random numbers between [10,99]
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(10, 99);
 
+
+    // Create an empty vector of size 1000
     std::vector<int> nums(RANDOM_GENERATED_NUMBER_AMOUNT);
 
+
+    // Fill the empty vector of size 1000 with random generated 
     for(auto it = nums.begin() ; it != nums.end() ; it++){
         *it = dist(gen);
     }
 
-    Hashmap h;
+
+
+    // Create and add values of the vector to the hashmap
+    Hashmap h;      
     for(int num : nums){
         h.add(num);
     }
+
+
 
     std::cout << "======================================================\n";
     std::cout << "Auto generated hashmap with removed duplicates\n";
@@ -130,6 +150,9 @@ int main(){
 
     std::cout << "======================================================\n";
 
+
+
+    // Get user input for table slot number and print 
     int row;
     std::cout << "Enter a table slot to print [1,9]" << std::endl;
     std::cin >> row;
